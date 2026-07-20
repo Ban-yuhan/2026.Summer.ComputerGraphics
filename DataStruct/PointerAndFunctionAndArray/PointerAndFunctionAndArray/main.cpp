@@ -1,5 +1,16 @@
 ﻿#include <stdio.h>
 
+//선언 : 있는것을 알리는 것
+//정의 : 실제로 구현하는것
+//초기화 : 선언과 동시에 값을 넣는 것
+//함수 : 특정 작업을 수행하는 코드블록.
+//식별자 : 무엇인가 구별하기 위해 정해진 것. 변수나 함수의 이름
+
+//전방성언
+//함수의 선언
+void PointerTestMain();
+void ArrayAPointerTestMain();
+
 
 //데이터 값을 전위연산자와 후위연산자의 차이를 이해하기 위해 프로그램을 작성하여라.
 
@@ -33,35 +44,130 @@ void OperatorTestMain()
 }
 
 
+int main() 
+{
+	//함수의 호출 : 함수를 부른다(실제로는 함수로 간다는 개념에 가까움)
+	//OperatorTestMain();
+	//PointerTestMain();
+
+	ArrayAPointerTestMain();
+
+	return 0;
+}
+
+
+
+void SwapVal(int nDataA, int nDataB)
+{
+	printf("SwapVal DataA[%p] : %d <-> DataB[%p] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
+
+	int ntemp = nDataA;
+	nDataA = nDataB;
+	nDataB = ntemp;
+}
+void SwapPointer(int* pA, int* pB)
+{
+	printf("SwapPointer DataA [%p] :%d <-> DataB [%p] : %d\n", &pA, pA, &pB, pB);
+	int temp = *pA;
+	*pB = *pB;
+	*pB = temp;
+}
+void SwapRef(int& a, int& b) //참조자 : 원본을 전달받음.
+{
+	printf("SwapRef DataA [%p] : %d <-> DataB [%p] : %d\n", &a, a, &b, b);
+}
+
+//두 변수를 변경하는 함수를 사용할 때, 각 함수에서 값/포인터/참조를 전달하여 계산이 어떻게되는 지 검증하는 프로그램을 만들어라
+//데이터 : nDataA, nDataB 2개의 변수 필요
+//알고리즘 : nDataA, nDataB에 값을 넣고, 각 함수를 호출하여 각함수에서 값/포인터/참조를 전달하여 계산이 어떻게 되는지 검증.
+//각 함수에서 매개변수의 주소값과 값을 출력하여, 전달된 변수의 정보를 출력하여 확인하고, 각 스왑이 끝나고 테스트함수에서 스왑된 변수의 값을 출력.
+void SwapTestMain() 
+{
+	int nDataA = 10;
+	int nDataB = 20;
+	
+	printf("Original nDataA[%d]%d, nDataB[%d]%d", &nDataA, nDataA, &nDataB, nDataB);
+
+	SwapVal(nDataA, nDataB);
+	printf("SwapValue DataA[%p] : %d <-> DataB [%[] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
+	
+	SwapPointer(&nDataA, &nDataB);
+	
+	SwapRef(nDataA, nDataB);
+}
+
+
 //정수와 실수의 데이터를 선언하고, 선언된 데이터를 각 실수와 정수의 포인터에 저장하여 모든 변수들에서 연산할 수 있는 모든 결과를 출력
 
 //포인터 : 변수의 주소값을 저장하는 변수. 예) int* pData = &nData; -> p : pointer약자. 
-//데이터 : 포인터(변수라는 의미를 포함) : pData, 포인터가 가르킬 변수 : nData
+//데이터 : 변수의 주소값을 저장하는 변수. 예) int* pData = &nData; , float* pDataFloat = &fData;
 //알고리즘 : nData에 값을 넣고, nData의 주소값을 pData에 넣는다.
 //			nData, pdata에서 할수있는 연산을 모두 출력.
 
 //변수에서 할 수 있는 연산
 // & : 변수의 주소값을 가져오는 연산자
 // * : 포인터가 가르키는 변수의 값을 가져오는 연산자
-void PointerTestMain() 
+
+void PointerTestMain()
 {
-	int nDataA = 10;
-	float fDataB = 8.314f;
+	printf("\n\n [PointerTestMain] \n\n");
 
-	int* pintDataA = &nDataA; 
-	float* pfloatDataB = &fDataB;
+	int nData = 10;
+	float fData = 8.314f;
 
-	printf("nDataA[%d, %p] \n", nDataA, &nDataA);
-	printf("pintDataA[%p, %d] \n", pintDataA, *pintDataA);
-	printf("fDataB[%f, %p] \n", fDataB, &fDataB);
-	printf("pfloatDataB[%p, %f] \n", pfloatDataB, *pfloatDataB);
+	int* pintData = &nData;
+	float* pfloatData = &fData;
+
+	printf("nData[%d, %d] \n", nData, &nData); //10, 주솟값
+	printf("pintData[%p, %d] \n", pintData, *pintData);
+	printf("fData[%f, %d] \n", fData, &fData);
+	printf("pfloatData[%p, %f] \n", pfloatData, *pfloatData);
 }
 
 
-int main() 
+//배열이 포인터를 이용하여 작동되는 방법을 검증하는 프로그램 만들기
+// 변수 : 배열, 포인터 arrData[3], int* pData
+// 
+// 알고리즘:
+//배열 선언. 크기3개
+//배열의 초기화 100, 80, 90
+//배열의 주소값을 저장하는 포인터를 만든다.
+//배열의 주소값에 포인터를 넣는다.
+//배열의 주소값과 데이터를 출력.
+//벼열의 주소값을 저장한 포인터에서 배열을 n번으로 더하여 주소값과 데이터를 출력.
+//배열의 주소값을 저장한 포인터에 3번만큼 1씩 증가하며 주소값과 데이터를 저장.
+void ArrayAPointerTestMain()
 {
-	OperatorTestMain();
-	PointerTestMain();
+	int arrData[3];
+	
+	for(int i =0; i <3; i++)
+	{
+		arrData[i] = 100 - (i*10);
+	}
 
-	return 0;
+	printf("arrData : ");
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		printf("[%d/%d]%d,", i, &arrData[i], arrData[i]);
+	}
+
+	printf("\n");
+	int* pData = arrData;
+
+	printf("pData+i : ");
+
+	for(size_t i = 0; i < 3; i++)
+	{
+		printf("[%d/%d]%d,", i, pData + i, *(arrData + i));
+	}
+
+	printf("\n");
+	printf("pData++ : ");
+
+	for(size_t i = 0; i < 3; i++)
+	{
+		printf("[%d/%d]%d,", i, pData, *pData);
+		pData++;
+	}
 }
