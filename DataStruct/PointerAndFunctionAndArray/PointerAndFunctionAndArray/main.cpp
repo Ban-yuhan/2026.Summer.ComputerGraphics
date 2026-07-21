@@ -9,7 +9,8 @@
 //전방성언
 //함수의 선언
 void PointerTestMain();
-void ArrayAPointerTestMain();
+void ArrayPointerTestMain();
+void SwapTestMain();	
 
 
 //데이터 값을 전위연산자와 후위연산자의 차이를 이해하기 위해 프로그램을 작성하여라.
@@ -49,8 +50,8 @@ int main()
 	//함수의 호출 : 함수를 부른다(실제로는 함수로 간다는 개념에 가까움)
 	//OperatorTestMain();
 	//PointerTestMain();
-
-	ArrayAPointerTestMain();
+	//SwapTestMain();
+	ArrayPointerTestMain();
 
 	return 0;
 }
@@ -59,7 +60,7 @@ int main()
 
 void SwapVal(int nDataA, int nDataB)
 {
-	printf("SwapVal DataA[%p] : %d <-> DataB[%p] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
+	printf("\nSwapVal DataA[%p] : %d <-> DataB[%p] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
 
 	int ntemp = nDataA;
 	nDataA = nDataB;
@@ -67,14 +68,17 @@ void SwapVal(int nDataA, int nDataB)
 }
 void SwapPointer(int* pA, int* pB)
 {
-	printf("SwapPointer DataA [%p] :%d <-> DataB [%p] : %d\n", &pA, pA, &pB, pB);
+	printf("\nSwapPointer DataA [%p] :%d <-> DataB [%p] : %d\n", &pA, pA, &pB, pB);
 	int temp = *pA;
-	*pB = *pB;
+	*pA = *pB;
 	*pB = temp;
 }
 void SwapRef(int& a, int& b) //참조자 : 원본을 전달받음.
 {
-	printf("SwapRef DataA [%p] : %d <-> DataB [%p] : %d\n", &a, a, &b, b);
+	printf("\nSwapRef DataA [%p] : %d <-> DataB [%p] : %d\n", &a, a, &b, b);
+	int temp = a;
+	a = b;
+	b = temp;
 }
 
 //두 변수를 변경하는 함수를 사용할 때, 각 함수에서 값/포인터/참조를 전달하여 계산이 어떻게되는 지 검증하는 프로그램을 만들어라
@@ -86,10 +90,10 @@ void SwapTestMain()
 	int nDataA = 10;
 	int nDataB = 20;
 	
-	printf("Original nDataA[%d]%d, nDataB[%d]%d", &nDataA, nDataA, &nDataB, nDataB);
+	printf("Original nDataA[%p]%d, nDataB[%p]%d", &nDataA, nDataA, &nDataB, nDataB);
 
 	SwapVal(nDataA, nDataB);
-	printf("SwapValue DataA[%p] : %d <-> DataB [%[] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
+	printf("\n\nSwapValue DataA[%p] : %d <-> DataB [%[] : %d\n", &nDataA, nDataA, &nDataB, nDataB);
 	
 	SwapPointer(&nDataA, &nDataB);
 	
@@ -136,7 +140,7 @@ void PointerTestMain()
 //배열의 주소값과 데이터를 출력.
 //벼열의 주소값을 저장한 포인터에서 배열을 n번으로 더하여 주소값과 데이터를 출력.
 //배열의 주소값을 저장한 포인터에 3번만큼 1씩 증가하며 주소값과 데이터를 저장.
-void ArrayAPointerTestMain()
+void ArrayPointerTestMain()
 {
 	int arrData[3];
 	
@@ -153,6 +157,7 @@ void ArrayAPointerTestMain()
 	}
 
 	printf("\n");
+
 	int* pData = arrData;
 
 	printf("pData+i : ");
@@ -163,6 +168,7 @@ void ArrayAPointerTestMain()
 	}
 
 	printf("\n");
+
 	printf("pData++ : ");
 
 	for(size_t i = 0; i < 3; i++)
