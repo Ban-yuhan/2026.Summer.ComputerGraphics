@@ -1,4 +1,5 @@
 ﻿#include <stdio.h>
+#include <string.h>
 
 //선언 : 있는것을 알리는 것
 //정의 : 실제로 구현하는것
@@ -11,7 +12,7 @@
 void PointerTestMain();
 void ArrayPointerTestMain();
 void SwapTestMain();	
-
+void ArrayMain();
 
 //데이터 값을 전위연산자와 후위연산자의 차이를 이해하기 위해 프로그램을 작성하여라.
 
@@ -51,7 +52,8 @@ int main()
 	//OperatorTestMain();
 	//PointerTestMain();
 	//SwapTestMain();
-	ArrayPointerTestMain();
+	//ArrayPointerTestMain();
+	ArrayMain();
 
 	return 0;
 }
@@ -142,7 +144,11 @@ void PointerTestMain()
 //배열의 주소값을 저장한 포인터에 3번만큼 1씩 증가하며 주소값과 데이터를 저장.
 void ArrayPointerTestMain()
 {
-	int arrData[3];
+	const int nSize = 3; //const(상수) : 변수의 값을 변경할 수 없게 만듦
+	//배열의 크기를 지정할 떄 컴파일러는 크기를 알아야 할당이 가능하기 때문에, 상수만 사용 가능.
+	//배열 : 연속으로 변수를 할당하여, 주소값을 통해 바로 인덱스로 접근 가능하도록 만들어진 변수.
+	//포인터연산 : 포인터의 값을 증가시키는 연산. 변수의 크기만큼 주소값이 증가. +n을 하면 변수의 크기 *n개가 됨.
+	int arrData[nSize];
 	
 	for(int i =0; i <3; i++)
 	{
@@ -176,4 +182,31 @@ void ArrayPointerTestMain()
 		printf("[%d/%d]%d,", i, pData, *pData);
 		pData++;
 	}
+}
+
+
+void ArrayMain()
+{
+	const int nSize = 3;
+	int arrScores[nSize];
+	int arrSize = sizeof(arrScores) / sizeof(arrScores[0]);
+	for (int i = 0; i < nSize; i++)
+		arrScores[i] = 100 - i * 10;
+	printf("arrScore[%d] : %d \n", &arrScores, arrScores);
+	for (int i = 0; i < nSize; i++)
+		printf("[%d/%d]%d,", (arrScores + i), i, *(arrScores + i));
+	printf("\n");
+
+	int* pScores = arrScores;
+	printf("1. PtrScores[%d] : %d \n", pScores, *pScores);
+	for (int i = 0; i < nSize; i++)
+	{
+		printf("[%d/%d]%d,", pScores, i, *pScores);
+		pScores++;
+	}
+	printf("\n");
+	int arrCopyArray[nSize];
+	for (int i = 0; i < nSize; i++)
+		arrCopyArray[nSize];
+	memcpy(arrCopyArray, arrScores, nSize);
 }
