@@ -7,7 +7,7 @@
 //함수 : 특정 작업을 수행하는 코드블록.
 //식별자 : 무엇인가 구별하기 위해 정해진 것. 변수나 함수의 이름
 
-//전방성언
+//전방선언
 //함수의 선언
 void PointerTestMain();
 void ArrayPointerTestMain();
