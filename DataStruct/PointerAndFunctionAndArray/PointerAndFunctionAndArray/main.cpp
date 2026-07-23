@@ -195,4 +195,29 @@ void ArrayMain()
 		arrScores[i] = 100 - i * 10;
 	}
 	printf("arrScore[%d] : %d \n", &arrScores, arrScores);
+
+	for (int i = 0; i < nSize; i++)
+	{
+		printf("[%d/%d]%d,", (arrScores + i), i, *(arrScores + i));
+	}
+	printf("\n");
+
+	int* pScores = arrScores;
+	printf("1. PtrScore[%d] : %d\n", pScores, *pScores);
+
+	for (int i = 0; i < nSize; i++)
+	{
+		printf("[%d/%d]%d,", pScores, i, *pScores);
+		pScores++;	
+	}
+	printf("\n");
+
+	int arrCopyArray[nSize];
+	for (int i = 0; i < nSize; i++)
+	{
+		arrCopyArray[i] = arrScores[i];
+	}
+	memcpy(arrCopyArray, arrScores, nSize);
+	
+	
 }
