@@ -11,6 +11,7 @@
 void PointerTestMain();
 void ArrayPointerTestMain();
 void SwapTestMain();	
+void ArrayMain();
 
 
 //데이터 값을 전위연산자와 후위연산자의 차이를 이해하기 위해 프로그램을 작성하여라.
@@ -51,7 +52,8 @@ int main()
 	//OperatorTestMain();
 	//PointerTestMain();
 	//SwapTestMain();
-	ArrayPointerTestMain();
+	//ArrayPointerTestMain();
+	ArrayMain();
 
 	return 0;
 }
@@ -176,4 +178,17 @@ void ArrayPointerTestMain()
 		printf("[%d/%d]%d,", i, pData, *pData);
 		pData++;
 	}
+}
+
+
+void ArrayMain() 
+{
+	const int nSize = 3;
+	int arrScores[nSize];
+	int arrSize = sizeof(arrScores) / sizeof(arrScores[0]);
+	for (int i =0; i < nSize; i++)
+	{
+		arrScores[i] = 100 - i * 10;
+	}
+	printf("arrScore[%d] : %d \n", &arrScores, arrScores);
 }
