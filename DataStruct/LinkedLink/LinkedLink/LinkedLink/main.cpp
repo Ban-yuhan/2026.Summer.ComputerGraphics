@@ -22,7 +22,7 @@ SNode* FindNodeData(SNode* pStart, int data); //해당 데이터를 가진 노드를 찾는다
 SNode* InsertNodeData(SNode* pStart, int data, int insert); //해당 데이터를 가진 노드 뒤에 노드를 추가한다.
 void DeleteNodeData(SNode* pStart, int del); //해당데이터를 가진 노드를 삭제한다.
 void PrintLinkedList(SNode* pStart); //노드를 순회하며 끝날때까지 출력한다.
-void DeleteLinkedList(SNode* pStart); //노드를 순회하며 모든데이터를 삭제한다.
+SNode* DeleteLinkedList(SNode* pStart); //노드를 순회하며 모든데이터를 삭제한다.
 void ReverseLinkedList(SNode* pStart); //
 
 //연결리스트 동적으로 입력받기.(동적할당 설명용)
@@ -64,7 +64,7 @@ void main()
 
 	PrintLinkedList(pBegin);
 
-	DeleteLinkedList(pBegin); //모든노드삭제 - 이 함수를 호출하지않을시 메모리가 누수됨.
+	pBegin = DeleteLinkedList(pBegin); //모든노드삭제 - 이 함수를 호출하지않을시 메모리가 누수됨.
 }
 
 //여기서 부터 기능을 구현한다.
@@ -125,7 +125,18 @@ void DeleteNodeData(SNode* pStart, int del)
 	SNode* pPre = NULL;
 	SNode* pNode = pStart;
 
+	if (pNode->pNext != NULL) 
+	{
+		while (pNode->nData != del)
+		{
+			pPre = pNode;
+			pNode = pNode->pNext;
+		}
+	}
 
+	pPre->pNext = pNode->pNext;
+	
+	delete pNode;
 }
 
 void PrintLinkedList(SNode* pStart)
@@ -143,10 +154,24 @@ void PrintLinkedList(SNode* pStart)
 	printf("\n");
 }
 
-void DeleteLinkedList(SNode* pStart)
+SNode* DeleteLinkedList(SNode* pStart)
 {
 	SNode* pNode = pStart;
 	SNode* pDel = NULL;
+
+	if (pStart != NULL)
+	{
+		while (pNode->pNext != NULL)
+		{
+			pDel = pNode;
+			pNode = pNode->pNext;
+			delete pDel;
+		}
+
+		delete pNode;
+	}
+
+	return NULL;
 }
 
 void InputAdd()
