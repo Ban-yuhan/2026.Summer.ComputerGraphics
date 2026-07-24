@@ -52,8 +52,8 @@ int main()
 	//OperatorTestMain();
 	//PointerTestMain();
 	//SwapTestMain();
-	//ArrayPointerTestMain();
-	ArrayMain();
+	ArrayPointerTestMain();
+	//ArrayMain();
 
 	return 0;
 }
@@ -141,13 +141,26 @@ void PointerTestMain()
 //배열의 주소값에 포인터를 넣는다.
 //배열의 주소값과 데이터를 출력.
 //벼열의 주소값을 저장한 포인터에서 배열을 n번으로 더하여 주소값과 데이터를 출력.
-//배열의 주소값을 저장한 포인터에 3번만큼 1씩 증가하며 주소값과 데이터를 저장.
+//배열의 주소값을 저장한 포인터에 3번만큼 1씩 증가하며 주소값과 데이터를 출력.
+
+//배열을 카피하기 위해서 기존에 할당된 크기만큼ㅁ 배열을 새롭게 할당하고,
+//원본배열을 카피배열에 원소 1개씩 복사.
+//memcpy를 이용하여 원본배열을 카피배열에 복사.
+
 void ArrayPointerTestMain()
 {
 	const int nSize = 3; //const(상수) : 변수의 값을 변경할 수 없게 만듦
 	//배열의 크기를 지정할 떄 컴파일러는 크기를 알아야 할당이 가능하기 때문에, 상수만 사용 가능.
 	//배열 : 연속으로 변수를 할당하여, 주소값을 통해 바로 인덱스로 접근 가능하도록 만들어진 변수.
 	//포인터연산 : 포인터의 값을 증가시키는 연산. 변수의 크기만큼 주소값이 증가. +n을 하면 변수의 크기 *n개가 됨.
+	//배열의 크기는 컴파일 전에 확정되어야 한다. -> 배열의 크기는 상수로 지정해야한다.
+	
+	//컴파일 : 코드를 빌드해서 실행가능한 형태로 만드는 것
+	// 정적 : 코드가 컴파일되어 변경될 수 없는 상태
+	//런타임(동적) : 프로그램이 실행되고 있는 상태
+	
+
+
 	int arrData[nSize];
 	
 	for(int i =0; i <3; i++)
@@ -182,6 +195,25 @@ void ArrayPointerTestMain()
 		printf("[%d/%d]%d,", i, pData, *pData);
 		pData++;
 	}
+	
+	printf("\n\n");
+
+	int arrCopy[nSize];
+	/*for(int i =0; i < nSize; i++)
+	{
+		arrCopy[i] = arrData[i];
+	}*/
+
+	int nArrayMemorySize = sizeof(arrData);
+	printf("ArrayMemorySize : %d\n", nArrayMemorySize);
+
+	memcpy(arrCopy, arrData, sizeof(arrData));
+	printf("arrCopy : ");
+	for (size_t i = 0; i < nSize; i++)
+	{
+		printf("[%d/%d]%d,", i, &arrCopy[i], arrCopy[i]);
+	}
+	printf("\n");
 }
 
 
