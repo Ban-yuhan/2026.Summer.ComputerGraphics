@@ -9,10 +9,10 @@ struct SNode {
 };
 
 
-SNode* CreateNode(SNode* pNode, int data);
-SNode* DeleteNodeData(SNode* pStart);
-void PrintLinkedList(SNode* pStart);
-SNode* DeleteLinkedList(SNode* pStart);
+SNode* Enqueue(SNode* pNode, int data);
+SNode* Dequeue(SNode* pStart);
+void PrintQueue(SNode* pStart);
+SNode* DeleteQueue(SNode* pStart);
 
 
 void main()
@@ -20,43 +20,43 @@ void main()
 	SNode* pBegin = NULL;
 	SNode* pEnd = NULL;
 
-	pEnd = CreateNode(pEnd, 10);
+	pEnd = Enqueue(pEnd, 10);
 
 	pBegin = pEnd;
 
-	pEnd = CreateNode(pEnd, 20);
-	pEnd = CreateNode(pEnd, 30);
-	pEnd = CreateNode(pEnd, 40);
-	pEnd = CreateNode(pEnd, 50);
+	pEnd = Enqueue(pEnd, 20);
+	pEnd = Enqueue(pEnd, 30);
+	pEnd = Enqueue(pEnd, 40);
+	pEnd = Enqueue(pEnd, 50);
 
-	PrintLinkedList(pBegin);
+	PrintQueue(pBegin);
 
-	pBegin = DeleteNodeData(pBegin);
+	pBegin = Dequeue(pBegin);
 
-	PrintLinkedList(pBegin);
+	PrintQueue(pBegin);
 
-	pEnd = CreateNode(pEnd, 80);
+	pEnd = Enqueue(pEnd, 80);
 
-	PrintLinkedList(pBegin);
+	PrintQueue(pBegin);
 
-	pBegin = DeleteNodeData(pBegin);
+	pBegin = Dequeue(pBegin);
 
-	PrintLinkedList(pBegin);
+	PrintQueue(pBegin);
 
 	printf("pBegin : %d[%d] \n", pBegin->nData,pBegin);
 
-	pBegin = DeleteNodeData(pBegin);
+	pBegin = Dequeue(pBegin);
 
-	PrintLinkedList(pBegin);
+	PrintQueue(pBegin);
 
 	printf("pBegin : %d[%d] \n", pBegin->nData, pBegin);
 
 
-	pBegin = DeleteLinkedList(pBegin);
+	pBegin = DeleteQueue(pBegin);
 }
 
 
-SNode* CreateNode(SNode* pNode, int data)
+SNode* Enqueue(SNode* pNode, int data)
 {
 	SNode* pTemp = NULL;
 
@@ -72,7 +72,7 @@ SNode* CreateNode(SNode* pNode, int data)
 }
 
 
-SNode* DeleteNodeData(SNode* pStart)
+SNode* Dequeue(SNode* pStart)
 {
 	SNode* pDel = NULL;
 	SNode* pNode = pStart;
@@ -86,7 +86,7 @@ SNode* DeleteNodeData(SNode* pStart)
 }
 
 
-void PrintLinkedList(SNode* pStart)
+void PrintQueue(SNode* pStart)
 {
 	SNode* pNode = pStart;
 	printf("data:");
@@ -102,7 +102,7 @@ void PrintLinkedList(SNode* pStart)
 }
 
 
-SNode* DeleteLinkedList(SNode* pStart)
+SNode* DeleteQueue(SNode* pStart)
 {
 	SNode* pNode = pStart;
 	SNode* pDel = NULL;
