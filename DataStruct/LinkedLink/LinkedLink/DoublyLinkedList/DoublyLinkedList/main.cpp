@@ -29,6 +29,8 @@ void main()
 	pEnd = CreateNode(pEnd, 40);
 	pEnd = CreateNode(pEnd, 50);
 
+	PrintLinkedList(pBegin);
+
 	SNode* pFind = FindNodeData(pBegin, 40);
 	printf("FInd : %d \n", pFind->nData);
 
@@ -63,5 +65,23 @@ SNode* FindNodeData(SNode* pStart, int data)
 	}
 
 	return pNode;
+}
+
+
+void PrintLinkedList(SNode* pStart) 
+{
+	SNode* pNode = pStart;
+	printf("data : ");
+	while (pNode) 
+	{
+		printf("%d", pNode->nData);
+		pNode = pNode->pNext;
+
+		if (pNode != NULL)
+		{
+			printf(",");
+		}
+	}
+	printf("\n");
 }
 
