@@ -23,7 +23,7 @@ SNode* InsertNodeData(SNode* pStart, int data, int insert); //해당 데이터�
 void DeleteNodeData(SNode* pStart, int del); //해당데이터를 가진 노드를 삭제한다.
 void PrintLinkedList(SNode* pStart); //노드를 순회하며 끝날때까지 출력한다.
 SNode* DeleteLinkedList(SNode* pStart); //노드를 순회하며 모든데이터를 삭제한다.
-void ReverseLinkedList(SNode* pStart); //
+void ReverseLinkedList(SNode*& pBegin, SNode*& pEnd);
 
 //연결리스트 동적으로 입력받기.(동적할당 설명용)
 void InputAdd();
@@ -64,8 +64,15 @@ void main()
 
 	PrintLinkedList(pBegin);
 
+	ReverseLinkedList(pBegin, pEnd);
+
+	printf("Reverse - ");
+
+	PrintLinkedList(pBegin);
+
 	pBegin = DeleteLinkedList(pBegin); //모든노드삭제 - 이 함수를 호출하지않을시 메모리가 누수됨.
 }
+
 
 //여기서 부터 기능을 구현한다.
 //기존코드는 손대지말고, 추가만 하여 현 프로그램 정상 작동하도록할것.
@@ -84,6 +91,7 @@ SNode* CreateNode(SNode* pNode, int data)
 	return  pTemp;
 }
 
+
 SNode* FindNodeData(SNode* pStart, int data)
 {
 	SNode* pNode = pStart;
@@ -96,6 +104,7 @@ SNode* FindNodeData(SNode* pStart, int data)
 
 	return pNode;
 }
+
 
 SNode* InsertNodeData(SNode* pStart, int data, int insert)
 {
@@ -120,6 +129,7 @@ SNode* InsertNodeData(SNode* pStart, int data, int insert)
 	return pNode;
 }
 
+
 void DeleteNodeData(SNode* pStart, int del)
 {
 	SNode* pPre = NULL;
@@ -139,6 +149,7 @@ void DeleteNodeData(SNode* pStart, int del)
 	delete pNode;
 }
 
+
 void PrintLinkedList(SNode* pStart)
 {
 	SNode* pNode = pStart;
@@ -153,6 +164,7 @@ void PrintLinkedList(SNode* pStart)
 	}
 	printf("\n");
 }
+
 
 SNode* DeleteLinkedList(SNode* pStart)
 {
@@ -173,6 +185,31 @@ SNode* DeleteLinkedList(SNode* pStart)
 
 	return NULL;
 }
+
+
+void ReverseLinkedList(SNode*& pBegin, SNode*& pEnd) 
+{
+	SNode* pPre = NULL;
+	SNode* pCur = pBegin;
+	SNode* pNext = NULL;
+
+	SNode* pNextEnd = pBegin;
+
+	while (pCur != NULL) 
+	{
+		pNext = pCur->pNext;
+		pCur->pNext = pPre;
+		pPre = pCur;
+		pCur = pNext;
+	}
+
+	pBegin = pPre;
+	pEnd = pNextEnd;
+}
+
+
+
+
 
 void InputAdd()
 {
