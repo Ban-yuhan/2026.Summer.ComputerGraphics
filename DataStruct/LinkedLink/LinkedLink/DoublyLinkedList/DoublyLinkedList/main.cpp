@@ -12,7 +12,10 @@ struct SNode
 
 SNode* CreateNode(SNode* pNode, int data);
 SNode* FindNodeData(SNode* pStart, int data);
+void DeleteNodeData(SNode* pEnd, int del);
 void PrintLinkedList(SNode* Start);
+void PrintLinkedListReverse(SNode* pEnd);
+SNode* DeleteLinkedList(SNode* pStart);
 
 
 void main()
@@ -31,10 +34,18 @@ void main()
 
 	PrintLinkedList(pBegin);
 
+	PrintLinkedListReverse(pEnd);
+
 	SNode* pFind = FindNodeData(pBegin, 40);
 	printf("FInd : %d \n", pFind->nData);
 
+	DeleteNodeData(pEnd,30);
 
+	PrintLinkedList(pBegin);
+
+	PrintLinkedListReverse(pEnd);
+
+	DeleteLinkedList(pBegin);
 }
 
 
@@ -68,6 +79,48 @@ SNode* FindNodeData(SNode* pStart, int data)
 }
 
 
+void DeleteNodeData(SNode* pEnd, int del)
+{
+	SNode* pNext = NULL;
+	SNode* pNode = pEnd;
+
+	if (pNode->pBefore != NULL)
+	{
+		while (pNode->nData != del)
+		{
+			pNext = pNode;
+			pNode = pNode->pBefore;
+		}
+	}
+
+	pNext->pBefore = pNode->pBefore;
+	pNode->pBefore->pNext = pNext;
+
+	delete pNode;
+}
+
+
+SNode* DeleteLinkedList(SNode* pStart)
+{
+	SNode* pNode = pStart;
+	SNode* pDel = NULL;
+
+	if (pStart != NULL)
+	{
+		while (pNode->pNext != NULL)
+		{
+			pDel = pNode;
+			pNode = pNode->pNext;
+			delete pDel;
+		}
+
+		delete pNode;
+	}
+
+	return NULL;
+}
+
+
 void PrintLinkedList(SNode* pStart) 
 {
 	SNode* pNode = pStart;
@@ -76,6 +129,24 @@ void PrintLinkedList(SNode* pStart)
 	{
 		printf("%d", pNode->nData);
 		pNode = pNode->pNext;
+
+		if (pNode != NULL)
+		{
+			printf(",");
+		}
+	}
+	printf("\n");
+}
+
+
+void PrintLinkedListReverse(SNode* pEnd)
+{
+	SNode* pNode = pEnd;
+	printf("data(R) : ");
+	while (pNode)
+	{
+		printf("%d", pNode->nData);
+		pNode = pNode->pBefore;
 
 		if (pNode != NULL)
 		{
