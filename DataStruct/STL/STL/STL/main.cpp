@@ -52,19 +52,24 @@ void VectorMain()
 //3.연결리스트의 종류: 단일, 환형, 이중 stl의 리스트는 어디에 해당되는가?
 void ListMain()
 {
-	list<int> container(1);//컨테이너생성시 크기를 지정가능하다.
-	container[0] = 10;
+	list<int> container(1);
+	container.push_back(10);
+
 	cout << "Print:";
-	for (int i = 0; i < container.size(); i++)
-		cout << "[" << i << "]" << container[i] << ",";
+	int i = 0;
+	for (int val : container)
+		cout << "[" << i++ << "]" << val << ",";
 	cout << endl;
-	list.resize(3); //배열의 크기를 지정한다.
+
+	container.resize(3);
+
 	cout << "Print:";
-	for (int i = 0; i < container.size(); i++)
-		cout << "[" << i << "]" << container[i] << ",";
+	i = 0;
+	for (int val : container)
+		cout << "[" << i++ << "]" << val << ",";
 	cout << endl;
 	//1.추가 2.삽입 3.삭제 4.모두삭제
-	vector<int>::iterator it;
+	list<int>::iterator it;
 	cout << "PrintPtr:";
 	for (it = container.begin(); it != container.end(); it++)
 		cout << "[" << &*it << "]" << *it << ",";
@@ -146,8 +151,8 @@ void HashMapMain()
 }
 void main()
 {
-	VectorMain();
-	//ListMain();
+	//VectorMain();
+	ListMain();
 	//DequeMain();
 	//StackMain();
 	//QueueMain();
