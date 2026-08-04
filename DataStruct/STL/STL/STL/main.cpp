@@ -29,21 +29,69 @@ void VectorMain()
 	for (int i = 0; i < container.size(); i++)
 		cout << "[" << i << "]" << container[i] << ",";
 	cout << endl;
+
 	container.resize(3); //배열의 크기를 지정한다.
 	cout << "Print:";
 	for (int i = 0; i < container.size(); i++)
 		cout << "[" << i << "]" << container[i] << ",";
 	cout << endl;
+	
+	for (int i = 0; i < container.size(); i++)
+	{
+		container[i] = (i+1) * 10;
+	}
+
+	cout << "Print:";
+	for (int i = 0; i < container.size(); i++)
+		cout << "[" << i << "]" << container[i] << ",";
+	cout << endl;
+
+
 	//1.추가 2.삽입 3.삭제 4.모두삭제
+
+	container.push_back(40);
+	cout << "Add : ";
+	for (int i = 0; i < container.size(); i++)
+	{
+		cout << "[" << i << "]" << container[i] << ",";
+	}
+	cout << endl;
+
 	vector<int>::iterator it;
+
+	it = find(container.begin(), container.end(), 40);
+	cout << "Find : " << *it << endl;
+	
+	container.insert(it, 50);
+
+	cout << "Insert : ";
+	for (int i = 0; i < container.size(); i++)
+	{
+		cout << "[" << i << "]" << container[i] << ",";
+	}
+	cout << endl;
+	
+	it = find(container.begin(), container.end(), 50);
+	container.erase(it);
+
+	cout << "Erase:";
+	for (int i = 0; i < container.size(); i++)
+		cout << "[" << i << "]" << container[i] << ",";
+	cout << endl;
+
 	cout << "PrintPtr:";
 	for (it = container.begin(); it != container.end(); it++)
+	{
 		cout << "[" << &*it << "]" << *it << ",";
+	}
 	cout << endl;
+
 	container.clear(); //모두삭제
 	cout << "Clear:";
 	for (it = container.begin(); it != container.end(); it++)
+	{
 		cout << "[" << &*it << "]" << *it << ",";
+	}
 	cout << endl;
 }
 //연결리스트
@@ -53,7 +101,7 @@ void VectorMain()
 void ListMain()
 {
 	list<int> container(1);
-	container.push_back(10);
+	*container.begin() = 10;
 
 	cout << "Print:";
 	int i = 0;
@@ -83,21 +131,109 @@ void ListMain()
 //데크: 앞뒤로 자료를 추가/삭제가능, 랜덤접근가능.
 void DequeMain()
 {
+	deque<int> container(1);
+	container[0] = 10;
 
+	container.push_back(20);
+	container.push_front(5);
+
+	cout << "Print : ";
+	for (int i = 0; i <container.size(); i++)
+	{
+		cout << "[" << i << "]" << container[i] << ",";
+	}
+	cout << endl;
+
+	container.resize(5);
+
+	cout << "Print : ";
+	for (int i = 0; i  < container.size(); i++)
+	{
+		cout << "[" << i << "]" << container[i] << ",";
+	}
+	cout << endl;
+
+	deque<int>::iterator it;
+	cout << "PrintPtr : ";
+	for (it = container.begin(); it != container.end(); it++)
+	{
+		cout << "[" << &*it << "]" << *it << ",";
+	}
+	cout << endl;
+
+	container.clear();
+	cout << "Clear : ";
+	for (it = container.begin(); it != container.end(); it++)
+	{
+		cout << "[" << &*it << "]" << *it << ",";
+	}
+	cout << endl;
 }
 //스택: 뒤에서 추가되고 뒤에서 꺼냄.
 //재귀함수에서 이전 함수를 호출할때마다 스택에 쌓임.
 //문자열뒤집기 -> 문자배열 -> apple -> elppa
 void StackMain()
 {
+	stack<int> container;
+	container.push(10);
+	container.push(20);
+	container.push(30);
+	container.push(40);
 
+	stack<int> temp = container;
+	cout << "Print : ";
+	while (!temp.empty())
+	{
+		cout << temp.top() << ",";
+		temp.pop();
+	}
+	cout << endl;
+
+	while (!container.empty())
+	{
+		container.pop();
+	}
+
+	temp = container;
+	cout << "Print : ";
+	while (!temp.empty())
+	{
+		cout << temp.top() << ",";
+		temp.pop();
+	}
+	cout << endl;
 }
 //큐: 뒤에서 추가하고 앞에서 꺼냄.
 //메세지큐: 이벤트가 발생한 순서대로 저장하는 공간.
 //입력된 순서대로 명령어 처리하기
 void QueueMain()
 {
+	queue<int> container;
+	container.push(10);
+	container.push(20);
+	container.push(30);
+	container.push(40);
 
+	queue<int> temp = container;
+	while(!temp.empty())
+	{
+		cout << "Print : " << temp.front() << ",";
+		temp.pop();
+	}
+	cout << endl;
+
+	while(!container.empty())
+	{
+		container.pop();
+	}
+
+	temp = container;
+	while (!temp.empty())
+	{
+		cout << "Print : " << temp.front() << ",";
+		temp.pop();
+	}
+	cout << endl;
 }
 //우선순위큐: 우선순위가 높은 원소가 먼저나감(힙)
 //무작위로 데이터를 넣었을때 어떤 순서대로 데이터가 나오는가? 큰값부터 나온다.
@@ -151,8 +287,8 @@ void HashMapMain()
 }
 void main()
 {
-	//VectorMain();
-	ListMain();
+	VectorMain();
+	//ListMain();
 	//DequeMain();
 	//StackMain();
 	//QueueMain();
