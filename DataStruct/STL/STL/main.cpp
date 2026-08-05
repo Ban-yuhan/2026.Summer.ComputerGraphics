@@ -120,6 +120,7 @@ void ListMain()
 	for (int val : container)
 		cout << "[" << i++ << "]" << val << ",";
 	cout << endl;
+
 	//1.추가 2.삽입 3.삭제 4.모두삭제
 	list<int>::iterator it;
 	cout << "PrintPtr:";
@@ -158,6 +159,7 @@ void DequeMain()
 	cout << endl;
 
 	deque<int>::iterator it;
+
 	cout << "PrintPtr : ";
 	for (it = container.begin(); it != container.end(); it++)
 	{
@@ -339,10 +341,10 @@ int main()
 {
 	//VectorMain();
 	//ListMain();
-	//DequeMain();
+	DequeMain();
 	//StackMain();
 	//QueueMain();
-	PriorytyQueueMain();
+	//PriorytyQueueMain();
 	//MapMain();
 	//SetMain();
 
