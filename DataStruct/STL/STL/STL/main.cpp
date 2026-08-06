@@ -249,8 +249,9 @@ void PriorytyQueueMain()
 	container.push(30);
 	container.push(20);
 
-	cout << "Print : ";
 	priority_queue<int> temp = container;
+
+	cout << "Print : ";
 	while (!temp.empty())
 	{
 		cout << temp.top() << ","; // 가장 큰 값 출력
@@ -261,8 +262,9 @@ void PriorytyQueueMain()
 	container.push(50);
 	container.push(40);
 
-	cout << "Print : ";
 	temp = container;
+
+	cout << "Print : ";
 	while (!temp.empty())
 	{
 		cout << temp.top() << ","; // 가장 큰 값 출력
@@ -277,6 +279,7 @@ void PriorytyQueueMain()
 	cout << endl;
 
 	cout << "Clear :" << endl;
+
 	temp = container;
 	while (!temp.empty())
 	{
@@ -342,8 +345,8 @@ int main()
 	//DequeMain();
 	//StackMain();
 	//QueueMain();
-	PriorytyQueueMain();
-	//MapMain();
+	//PriorytyQueueMain();
+	MapMain();
 	//SetMain();
 
 	return 0;

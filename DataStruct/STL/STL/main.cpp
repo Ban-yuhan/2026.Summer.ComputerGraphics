@@ -120,7 +120,6 @@ void ListMain()
 	for (int val : container)
 		cout << "[" << i++ << "]" << val << ",";
 	cout << endl;
-
 	//1.추가 2.삽입 3.삭제 4.모두삭제
 	list<int>::iterator it;
 	cout << "PrintPtr:";
@@ -159,7 +158,6 @@ void DequeMain()
 	cout << endl;
 
 	deque<int>::iterator it;
-
 	cout << "PrintPtr : ";
 	for (it = container.begin(); it != container.end(); it++)
 	{
@@ -180,28 +178,17 @@ void DequeMain()
 //문자열뒤집기 -> 문자배열 -> apple -> elppa
 void StackMain()
 {
-	stack<char> container;
-	string str = "apple";
+	stack<int> container;
+	container.push(10);
+	container.push(20);
+	container.push(30);
+	container.push(40);
 
-	//범위기반 for문
-	/*for (char c : str)
-	{
-		container.push(c);
-	}*/
-
-	for (int i = 0; i < str.length(); i++)
-	{
-		char c = str[i];
-		container.push(c);
-	}
-
-
-	stack<char> temp = container;
-
+	stack<int> temp = container;
 	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << temp.top();
+		cout << temp.top() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -215,7 +202,7 @@ void StackMain()
 	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << temp.top();
+		cout << temp.top() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -232,10 +219,9 @@ void QueueMain()
 	container.push(40);
 
 	queue<int> temp = container;
-	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << temp.front() << ",";
+		cout << "Print : " << temp.front() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -246,10 +232,9 @@ void QueueMain()
 	}
 
 	temp = container;
-	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout<< temp.front() << ",";
+		cout << "Print : " << temp.front() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -264,8 +249,9 @@ void PriorytyQueueMain()
 	container.push(30);
 	container.push(20);
 
-	cout << "Print : ";
 	priority_queue<int> temp = container;
+
+	cout << "Print : ";
 	while (!temp.empty())
 	{
 		cout << temp.top() << ","; // 가장 큰 값 출력
@@ -276,8 +262,9 @@ void PriorytyQueueMain()
 	container.push(50);
 	container.push(40);
 
-	cout << "Print : ";
 	temp = container;
+
+	cout << "Print : ";
 	while (!temp.empty())
 	{
 		cout << temp.top() << ","; // 가장 큰 값 출력
@@ -292,6 +279,7 @@ void PriorytyQueueMain()
 	cout << endl;
 
 	cout << "Clear :" << endl;
+
 	temp = container;
 	while (!temp.empty())
 	{
@@ -356,9 +344,9 @@ int main()
 	//ListMain();
 	//DequeMain();
 	//StackMain();
-	QueueMain();
+	//QueueMain();
 	//PriorytyQueueMain();
-	//MapMain();
+	MapMain();
 	//SetMain();
 
 	return 0;
