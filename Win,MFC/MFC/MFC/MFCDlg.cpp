@@ -59,12 +59,14 @@ CMFCDlg::CMFCDlg(CWnd* pParent /*=nullptr*/)
 void CMFCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON1, m_btnButton);
 }
 
 BEGIN_MESSAGE_MAP(CMFCDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -153,3 +155,9 @@ HCURSOR CMFCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CMFCDlg::OnBnClickedButton1()
+{
+	m_btnButton.SetWindowTextW(L"test button");
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}

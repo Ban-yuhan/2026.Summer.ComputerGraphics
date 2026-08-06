@@ -31,4 +31,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	// 버튼테스트
+	CButton m_btnButton;
+	afx_msg void OnBnClickedButton1();
 };

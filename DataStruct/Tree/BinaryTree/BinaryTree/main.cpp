@@ -1,9 +1,9 @@
 /*##################################
-ì´ì§„íŠ¸ë¦¬(Cì–¸ì–´ ìˆ˜ì—…ìš©)
-íŒŒì¼ëª…: BinaryTree.cpp
-ì‘ì„±ì : ê¹€í™ê·œ(downkhg@gmail.com)
-ë§ˆì§€ë§‰ìˆ˜ì •ë‚ ì§œ : 2022.03.04
-ë²„ì „ : 1.01
+ÀÌÁøÆ®¸®(C¾ğ¾î ¼ö¾÷¿ë)
+ÆÄÀÏ¸í: BinaryTree.cpp
+ÀÛ¼ºÀÚ : ±èÈ«±Ô(downkhg@gmail.com)
+¸¶Áö¸·¼öÁ¤³¯Â¥ : 2022.03.04
+¹öÀü : 1.01
 ###################################*/
 #include <stdio.h>
 
@@ -41,11 +41,11 @@ bool MakeRight(SNode* pParent, SNode* pChilde)
 void Traverse(SNode* pNode)
 {
 	if (!pNode) return;
-	//printf("%d\n", pNode->nData); //ì „ìœ„
+	//printf("%d\n", pNode->nData); //ÀüÀ§
 	Traverse(pNode->pLeft);
-	//printf("%d\n", pNode->nData); //ì¤‘ìœ„
+	//printf("%d\n", pNode->nData); //ÁßÀ§
 	Traverse(pNode->pRight);
-	printf("%d\n", pNode->nData); //í›„ìœ„
+	printf("%d\n", pNode->nData); //ÈÄÀ§
 }
 
 void Print(SNode* pSeed)

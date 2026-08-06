@@ -180,17 +180,28 @@ void DequeMain()
 //문자열뒤집기 -> 문자배열 -> apple -> elppa
 void StackMain()
 {
-	stack<int> container;
-	container.push(10);
-	container.push(20);
-	container.push(30);
-	container.push(40);
+	stack<char> container;
+	string str = "apple";
 
-	stack<int> temp = container;
+	//범위기반 for문
+	/*for (char c : str)
+	{
+		container.push(c);
+	}*/
+
+	for (int i = 0; i < str.length(); i++)
+	{
+		char c = str[i];
+		container.push(c);
+	}
+
+
+	stack<char> temp = container;
+
 	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << temp.top() << ",";
+		cout << temp.top();
 		temp.pop();
 	}
 	cout << endl;
@@ -204,7 +215,7 @@ void StackMain()
 	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << temp.top() << ",";
+		cout << temp.top();
 		temp.pop();
 	}
 	cout << endl;
@@ -221,9 +232,10 @@ void QueueMain()
 	container.push(40);
 
 	queue<int> temp = container;
+	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << "Print : " << temp.front() << ",";
+		cout << temp.front() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -234,9 +246,10 @@ void QueueMain()
 	}
 
 	temp = container;
+	cout << "Print : ";
 	while (!temp.empty())
 	{
-		cout << "Print : " << temp.front() << ",";
+		cout<< temp.front() << ",";
 		temp.pop();
 	}
 	cout << endl;
@@ -341,9 +354,9 @@ int main()
 {
 	//VectorMain();
 	//ListMain();
-	DequeMain();
+	//DequeMain();
 	//StackMain();
-	//QueueMain();
+	QueueMain();
 	//PriorytyQueueMain();
 	//MapMain();
 	//SetMain();
