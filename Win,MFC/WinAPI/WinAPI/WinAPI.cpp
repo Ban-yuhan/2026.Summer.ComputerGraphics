@@ -3,8 +3,10 @@
 
 #include "framework.h"
 #include "WinAPI.h"
+#include <conio.h>
 
 #define MAX_LOADSTRING 100
+#define MH_BUTTON 0
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -24,6 +26,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
+
+    AllocConsole();
 
     // TODO: 여기에 코드를 입력합니다.
 
@@ -52,6 +56,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+
+    FreeConsole();
     return (int) msg.wParam;
 }
 
@@ -129,17 +135,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         CreateWindow(TEXT("button"), TEXT("Click me"),
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-            20, 20, 100, 25, hWnd, (HMENU)0, hInst, NULL);
+            20, 20, 100, 25, hWnd, (HMENU)0, hInst, NULL); //HMENU : WM_COMMAND의 switch문에서 반응하는case
+        _cprintf("WM_CREATE!\n");
+
+        CreateWindow(TEXT("button2"), TEXT("Click me2"),
+            WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+            200, 20, 100, 25, hWnd, (HMENU)1, hInst, NULL);
         break;
     }
     case WM_COMMAND:
         {
+
             int wmId = LOWORD(wParam);
+
+            _cprintf("WM_COMMAND! %d\n", wmId);
+
             // 메뉴 선택을 구문 분석합니다:
             switch (wmId)
             {
-            case 0:
+            case MH_BUTTON:
                 MessageBox(hWnd, TEXT("First Button Clicked"), TEXT("Button"), MB_OK);
+                break;
+            case 1:
+                MessageBox(hWnd, TEXT("Second Button Clicked"), TEXT("Button2"), MB_OK);
                 break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -154,6 +172,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_PAINT:
         {
+        _cprintf("WM_PAINT!\n");
+
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
@@ -161,6 +181,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
+        _cprintf("WM_DESTROY!\n");
+
         PostQuitMessage(0);
         break;
     default:

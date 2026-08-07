@@ -35,4 +35,5 @@ public:
 	// 버튼테스트
 	CButton m_btnButton;
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedOk();
 };
