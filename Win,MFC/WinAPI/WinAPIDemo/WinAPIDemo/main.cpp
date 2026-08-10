@@ -75,7 +75,7 @@ int main()
 
 	queue<int> msgQueue;
 
-	msgQueue.push(CREATE);
+	msgQueue.push(1);
 
 	cout << "Msg:" << &msgQueue << endl;
 	//프로세스: 프로그램의 가장 기본적인 처리를 당담하는 흐름단위(메인루프), 큰흐름단위.
