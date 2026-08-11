@@ -48,11 +48,14 @@ namespace ThreadTaskAsync
             //모든 스레드가 종료될때까지 대기한다.
             for (int i = 0; i < nFullCount; i++)
             {
-                listThread[i].Join();
-            };
+                //모든 스레드가 종료될때까지 대기.
+                listThread[i].Join(); //join() : 
+            }
+            ;
 
             Console.WriteLine("ThreadDelayTime:{0}", DateTime.Now.Millisecond - nTime);
         }
+
         //내부에서 스레드를 관리하므로 쓰레드에비해 빠르게 처리된다.
         static void TaskTestMain()
         {

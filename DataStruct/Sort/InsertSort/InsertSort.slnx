@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="InsertSort/InsertSort.vcxproj" />
+  <Project Path="InsertSort/InsertSort.vcxproj" Id="7724e2e9-ba9f-46a5-a3b5-c81c2af0925d" />
 </Solution>
