@@ -18,7 +18,10 @@ namespace ThreadTaskAsync
         {
             for (int i = 0; i < 9999; i++)
             {
-                //Console.WriteLine(nId+":ThreadCallBack:" + i);
+                if (i % 1000 == 0)
+                {
+                    Console.WriteLine(nId + ":ThreadCallBack:" + i);
+                }
             }
         }
     }
@@ -28,6 +31,7 @@ namespace ThreadTaskAsync
         //각 쓰레드 풀을 2000개씩 만들어 작동시키기고 끝날때까지 프로그램 지연하기
         static int nFullCount = 4000;
         //쓰레드가 많아지면 느려진다.
+
         static void ThreadTestMain()
         {
             //쓰레드를 지정한 개수만큼 만들어서 처리
