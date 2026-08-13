@@ -52,8 +52,7 @@ class SimpleJobScheduler
                 {
                 while (true)
                     {
-                        std::function<void()> task;
-
+                        std::function<void()> task; //작업 내 정보가 들어있기 때문에, 작업 종료후 소멸자를 타고 같이 해제되어 메모리자원을 아낄 수 있도록 while문 내에 작성
                         {
                             // 큐에 접근할 때 다른 스레드가 건드리지 못하게 Lock
                             std::unique_lock<std::mutex> lock(this->queueMutex);
@@ -66,9 +65,13 @@ class SimpleJobScheduler
 
 
                             // 일거리가 들어오거나 stop 신호가 올 때까지 스레드를 재움 (CPU 점유율 0%)
-                            this->cv.wait(lock, [this]() {
-                                return this->stop || !this->jobQueue.empty();
+                            //wait()내의 조건이 참일 때 까지 대기
+                            //스레드 풀에서 전형적으로 쓰이는 패턴
+                            this->cv.wait(lock, [this]()  //wait()는 조건이 참이 되었는지 반복 확인하여야하기 때문에 조건만 넘겨줄 경우 while을 돌려야함. 람다표현식으로 조건이 든 함수 자체를 넘겨주어 wait()가 알아서 반복확인을 할 수 있도록 함
+                                {
+                                return this->stop || !this->jobQueue.empty(); //스케줄러가 멈추었거나(종료해야할 때) 작업 큐 가 비어있지 않다면(일 해야할 때), 대기를 풀고 깨어남.
                                 });
+                            
 
                             // 종료 신호가 왔고 대기열이 비었으면 스레드 종료
                             if (this->stop && this->jobQueue.empty()) {
@@ -77,8 +80,8 @@ class SimpleJobScheduler
                             }
 
                             // 큐에서 일거리를 하나 꺼냄
-                            task = std::move(this->jobQueue.front());
-                            this->jobQueue.pop();
+                            task = std::move(this->jobQueue.front()); //std::move() : ()안에 전달된 메모리의 주소값을 새 변수가 가르키도록 하고, 기존에 가르키던 노드는 null로 바꿔 연결을 해제.
+                            this->jobQueue.pop(); //null인 front()를 제거
                         } // lock 해제
 
                     // 일거리 실행 (9999 루프)
@@ -93,6 +96,7 @@ class SimpleJobScheduler
     void EnqueueJob(const JobWorkItem& job) {
         {
             std::unique_lock<std::mutex> lock(queueMutex);
+
             // lambda로 작업 감싸서 큐에 삽입
             jobQueue.emplace([job]() { job.Execute(); });
         }
@@ -108,7 +112,8 @@ class SimpleJobScheduler
         cv.notify_all(); // 모든 스레드를 깨워서 종료하도록 함
 
         // 모든 일꾼 스레드가 끝날 때까지 대기 (Join)
-        for (std::thread& worker : workers) {
+        for (std::thread& worker : workers) { //범위기반 for문. :오른쪽 컨테이너에서 요소를 꺼네 왼쪽에 담아줌. 모든 요소를 돌 때 까지 반복.
+            //thread객체는 복사가 불가능한 객체이기에 참조연산자 사용.
             if (worker.joinable()) {
                 worker.join();
             }
