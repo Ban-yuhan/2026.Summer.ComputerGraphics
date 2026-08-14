@@ -221,3 +221,8 @@ DFS : depth first search. 깊이 우선 탐색. 그래프에서 한 정점의 �
 [Direct2D]
 
 SDK :
+
+Factory : 
+
+HwndRenderTarget : 렌더링 타겟. 내가 그림을 그릴 종이.
+└ Hwnd : HandlerWindow
