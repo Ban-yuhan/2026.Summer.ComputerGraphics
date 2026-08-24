@@ -1,11 +1,11 @@
-ï»¿/**----------------------------------------------------------------------------
-* \brief ê´‘ì› ì„¤ì •
-* íŒŒì¼: Lights.cpp
+/**----------------------------------------------------------------------------
+* \brief ±¤¿ø ¼³Á¤
+* ÆÄÀÏ: Lights.cpp
 *
-* ì„¤ëª…: ì¡°ëª…ì„ ì‚¬ìš©í•˜ë©´ í›¨ì”¬ë” ê·¹ì ì¸ ì—°ì¶œì´ ê°€ëŠ¥í•˜ë‹¤.
-*       ì¡°ëª…ì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´ì„œëŠ” ê´‘ì›ì´ë‚˜ ìž¬ì§ˆì„ ìƒì„±í•´ì•¼í•œë‹¤. ë˜í•œ ê¸°í•˜ì •ë³´ì—
-*       ë…¸ë©€ë²¡í„°ì •ë³´ë¥¼ í¬í•¨í•˜ê³  ìžˆì–´ì•¼ í•œë‹¤.
-*       ê´‘ì›ì€ ìœ„ì¹˜,ìƒ‰ê¹”,ë°©í–¥ë“±ì˜ ì •ë³´ë¥¼ ë°”íƒ•ìœ¼ë¡œ ìƒì„±ëœë‹¤.
+* ¼³¸í: Á¶¸íÀ» »ç¿ëÇÏ¸é ÈÎ¾À´õ ±ØÀûÀÎ ¿¬ÃâÀÌ °¡´ÉÇÏ´Ù.
+*       Á¶¸íÀ» »ç¿ëÇÏ±â À§ÇØ¼­´Â ±¤¿øÀÌ³ª ÀçÁúÀ» »ý¼ºÇØ¾ßÇÑ´Ù. ¶ÇÇÑ ±âÇÏÁ¤º¸¿¡
+*       ³ë¸Öº¤ÅÍÁ¤º¸¸¦ Æ÷ÇÔÇÏ°í ÀÖ¾î¾ß ÇÑ´Ù.
+*       ±¤¿øÀº À§Ä¡,»ö±ò,¹æÇâµîÀÇ Á¤º¸¸¦ ¹ÙÅÁÀ¸·Î »ý¼ºµÈ´Ù.
 *------------------------------------------------------------------------------
 */
 #include <Windows.h>
@@ -16,39 +16,39 @@
 
 
 /**-----------------------------------------------------------------------------
-*  ì „ì—­ë³€ìˆ˜
+*  Àü¿ªº¯¼ö
 *------------------------------------------------------------------------------
 */
-LPDIRECT3D9             g_pD3D = NULL; /// D3D ë””ë°”ì´ìŠ¤ë¥¼ ìƒì„±í•  D3Dê°ì²´ë³€ìˆ˜
-LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; /// ë Œë”ë§ì— ì‚¬ìš©ë  D3Dë””ë°”ì´ìŠ¤
-LPDIRECT3DVERTEXBUFFER9 g_pVB = NULL; /// ì •ì ì„ ë³´ê´€í•  ì •ì ë²„í¼
+LPDIRECT3D9             g_pD3D = NULL; /// D3D µð¹ÙÀÌ½º¸¦ »ý¼ºÇÒ D3D°´Ã¼º¯¼ö
+LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; /// ·»´õ¸µ¿¡ »ç¿ëµÉ D3Dµð¹ÙÀÌ½º
+LPDIRECT3DVERTEXBUFFER9 g_pVB = NULL; /// Á¤Á¡À» º¸°üÇÒ Á¤Á¡¹öÆÛ
 
-/// ì‚¬ìš©ìž ì •ì ì„ ì •ì˜í•  êµ¬ì¡°ì²´
-/// ê´‘ì›ì„ ì‚¬ìš©í•˜ê¸°ë•Œë¬¸ì— ë…¸ë©€ë²¡í„°ê°€ ìžˆì–´ì•¼ í•œë‹¤ëŠ” ì‚¬ì‹¤ì„ ëª…ì‹¬í•˜ìž.
+/// »ç¿ëÀÚ Á¤Á¡À» Á¤ÀÇÇÒ ±¸Á¶Ã¼
+/// ±¤¿øÀ» »ç¿ëÇÏ±â¶§¹®¿¡ ³ë¸Öº¤ÅÍ°¡ ÀÖ¾î¾ß ÇÑ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏÀÚ.
 struct CUSTOMVERTEX
 {
-	D3DXVECTOR3 position; /// ì •ì ì˜ 3ì°¨ì› ì¢Œí‘œ
-	D3DXVECTOR3 normal;   /// ì •ì ì˜ ë…¸ë©€ ë²¡í„°
+	D3DXVECTOR3 position; /// Á¤Á¡ÀÇ 3Â÷¿ø ÁÂÇ¥
+	D3DXVECTOR3 normal;   /// Á¤Á¡ÀÇ ³ë¸Ö º¤ÅÍ
 };
 
-/// ì‚¬ìš©ìž ì •ì  êµ¬ì¡°ì²´ì— ê´€í•œ ì •ë³´ë¥¼ ë‚˜íƒ€ë‚´ëŠ” FVFê°’
+/// »ç¿ëÀÚ Á¤Á¡ ±¸Á¶Ã¼¿¡ °üÇÑ Á¤º¸¸¦ ³ªÅ¸³»´Â FVF°ª
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_NORMAL)
 
 
 
 
 /**-----------------------------------------------------------------------------
-* Direct3D ì´ˆê¸°í™”
+* Direct3D ÃÊ±âÈ­
 *------------------------------------------------------------------------------
 */
 HRESULT InitD3D(HWND hWnd)
 {
-	/// ë””ë°”ì´ìŠ¤ë¥¼ ìƒì„±í•˜ê¸°ìœ„í•œ D3Dê°ì²´ ìƒì„±
+	/// µð¹ÙÀÌ½º¸¦ »ý¼ºÇÏ±âÀ§ÇÑ D3D°´Ã¼ »ý¼º
 	if (NULL == (g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)))
 		return E_FAIL;
 
-	/// ë””ë°”ì´ìŠ¤ë¥¼ ìƒì„±í•  êµ¬ì¡°ì²´
-	/// ë³µìž¡í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ê·¸ë¦´ê²ƒì´ê¸°ë•Œë¬¸ì—, ì´ë²ˆì—ëŠ” Zë²„í¼ê°€ í•„ìš”í•˜ë‹¤.
+	/// µð¹ÙÀÌ½º¸¦ »ý¼ºÇÒ ±¸Á¶Ã¼
+	/// º¹ÀâÇÑ ¿ÀºêÁ§Æ®¸¦ ±×¸±°ÍÀÌ±â¶§¹®¿¡, ÀÌ¹ø¿¡´Â Z¹öÆÛ°¡ ÇÊ¿äÇÏ´Ù.
 	D3DPRESENT_PARAMETERS d3dpp;
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
 	d3dpp.Windowed = TRUE;
@@ -57,7 +57,7 @@ HRESULT InitD3D(HWND hWnd)
 	d3dpp.EnableAutoDepthStencil = TRUE;
 	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
-	/// ë””ë°”ì´ìŠ¤ ìƒì„±
+	/// µð¹ÙÀÌ½º »ý¼º
 	if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
 		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 		&d3dpp, &g_pd3dDevice)))
@@ -66,12 +66,12 @@ HRESULT InitD3D(HWND hWnd)
 	}
 
 
-	//g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW); //ì»¬ë§ì„ì¼ ë‹¤.
-	g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE); //ì»¬ë§ì„ëˆë‹¤.
+	//g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW); //ÄÃ¸µÀ»ÄÒ´Ù.
+	g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE); //ÄÃ¸µÀ»²ö´Ù.
 
 
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE); // Zë²„í¼ê¸°ëŠ¥ì„ ì¼ ë‹¤.
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE); // Zë²„í¼ê¸°ëŠ¥ì„ ëˆë‹¤.
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE); // Z¹öÆÛ±â´ÉÀ» ÄÒ´Ù.
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE); // Z¹öÆÛ±â´ÉÀ» ²ö´Ù.
 
 	return S_OK;
 }
@@ -80,12 +80,12 @@ HRESULT InitD3D(HWND hWnd)
 
 
 /**-----------------------------------------------------------------------------
-* ê¸°í•˜ì •ë³´ ì´ˆê¸°í™”
+* ±âÇÏÁ¤º¸ ÃÊ±âÈ­
 *------------------------------------------------------------------------------
 */
 HRESULT InitGeometry()
 {
-	/// ì •ì ë²„í¼ ìƒì„±
+	/// Á¤Á¡¹öÆÛ »ý¼º
 	if (FAILED(g_pd3dDevice->CreateVertexBuffer(50 * 2 * sizeof(CUSTOMVERTEX),
 		0, D3DFVF_CUSTOMVERTEX,
 		D3DPOOL_DEFAULT, &g_pVB, NULL)))
@@ -93,17 +93,17 @@ HRESULT InitGeometry()
 		return E_FAIL;
 	}
 
-	/// ì•Œê³ ë¦¬ì¦˜ì„ ì‚¬ìš©í•´ì„œ ì‹¤ë¦°ë”(ìœ„ ì•„ëž˜ê°€ í„°ì§„ ì›í†µ)ë¥¼ ë§Œë“ ë‹¤.
+	/// ¾Ë°í¸®ÁòÀ» »ç¿ëÇØ¼­ ½Ç¸°´õ(À§ ¾Æ·¡°¡ ÅÍÁø ¿øÅë)¸¦ ¸¸µç´Ù.
 	CUSTOMVERTEX* pVertices;
 	if (FAILED(g_pVB->Lock(0, 0, (void**)&pVertices, 0)))
 		return E_FAIL;
 	for (DWORD i = 0; i < 50; i++)
 	{
 		FLOAT theta = (2 * D3DX_PI * i) / (50 - 1);
-		pVertices[2 * i + 0].position = D3DXVECTOR3(sinf(theta), -1.0f, cosf(theta));	/// ì‹¤ë¦°ë”ì˜ ì•„ëž˜ìª½ ì›í†µì˜ ì¢Œí‘œ
-		pVertices[2 * i + 0].normal = D3DXVECTOR3(sinf(theta), 0.0f, cosf(theta));	/// ì‹¤ë¦°ë”ì˜ ì•„ëž˜ìª½ ì›í†µì˜ ë…¸ë©€
-		pVertices[2 * i + 1].position = D3DXVECTOR3(sinf(theta), 1.0f, cosf(theta));	/// ì‹¤ë¦°ë”ì˜ ìœ„ìª½ ì›í†µì˜ ì¢Œí‘œ
-		pVertices[2 * i + 1].normal = D3DXVECTOR3(sinf(theta), 0.0f, cosf(theta));	/// ì‹¤ë¦°ë”ì˜ ìœ„ìª½ ì›í†µì˜ ë…¸ë©€
+		pVertices[2 * i + 0].position = D3DXVECTOR3(sinf(theta), -1.0f, cosf(theta));	/// ½Ç¸°´õÀÇ ¾Æ·¡ÂÊ ¿øÅëÀÇ ÁÂÇ¥
+		pVertices[2 * i + 0].normal = D3DXVECTOR3(sinf(theta), 0.0f, cosf(theta));	/// ½Ç¸°´õÀÇ ¾Æ·¡ÂÊ ¿øÅëÀÇ ³ë¸Ö
+		pVertices[2 * i + 1].position = D3DXVECTOR3(sinf(theta), 1.0f, cosf(theta));	/// ½Ç¸°´õÀÇ À§ÂÊ ¿øÅëÀÇ ÁÂÇ¥
+		pVertices[2 * i + 1].normal = D3DXVECTOR3(sinf(theta), 0.0f, cosf(theta));	/// ½Ç¸°´õÀÇ À§ÂÊ ¿øÅëÀÇ ³ë¸Ö
 	}
 	g_pVB->Unlock();
 
@@ -114,7 +114,7 @@ HRESULT InitGeometry()
 
 
 /**-----------------------------------------------------------------------------
-* ì´ˆê¸°í™”ëœ ê°ì²´ë“¤ ì†Œê±°
+* ÃÊ±âÈ­µÈ °´Ã¼µé ¼Ò°Å
 *------------------------------------------------------------------------------
 */
 VOID Cleanup()
@@ -132,18 +132,18 @@ VOID Cleanup()
 
 
 /**-----------------------------------------------------------------------------
-* í–‰ë ¬ ì„¤ì •
+* Çà·Ä ¼³Á¤
 *------------------------------------------------------------------------------
 */
 VOID SetupMatrices()
 {
-	/// ì›”ë“œí–‰ë ¬
+	/// ¿ùµåÇà·Ä
 	D3DXMATRIXA16 matWorld;
-	D3DXMatrixIdentity(&matWorld);							/// ì›”ë“œí–‰ë ¬ì„ ë‹¨ìœ„í–‰ë ¬ìœ¼ë¡œ ì„¤ì •
-	D3DXMatrixRotationX(&matWorld, timeGetTime() / 500.0f);		/// Xì¶•ì„ ì¤‘ì‹¬ìœ¼ë¡œ íšŒì „í–‰ë ¬ ìƒì„±
-	g_pd3dDevice->SetTransform(D3DTS_WORLD, &matWorld);		/// ë””ë°”ì´ìŠ¤ì— ì›”ë“œí–‰ë ¬ ì„¤ì •
+	D3DXMatrixIdentity(&matWorld);							/// ¿ùµåÇà·ÄÀ» ´ÜÀ§Çà·ÄÀ¸·Î ¼³Á¤
+	D3DXMatrixRotationX(&matWorld, timeGetTime() / 500.0f);		/// XÃàÀ» Áß½ÉÀ¸·Î È¸ÀüÇà·Ä »ý¼º
+	g_pd3dDevice->SetTransform(D3DTS_WORLD, &matWorld);		/// µð¹ÙÀÌ½º¿¡ ¿ùµåÇà·Ä ¼³Á¤
 
-	/// ë·°í–‰ë ¬ì„ ì„¤ì •
+	/// ºäÇà·ÄÀ» ¼³Á¤
 	D3DXVECTOR3 vEyePt(0.0f, 3.0f, -5.0f);
 	D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);
@@ -151,7 +151,7 @@ VOID SetupMatrices()
 	D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
 	g_pd3dDevice->SetTransform(D3DTS_VIEW, &matView);
 
-	/// í”„ë¡œì ì…˜ í–‰ë ¬ ì„¤ì •
+	/// ÇÁ·ÎÁ§¼Ç Çà·Ä ¼³Á¤
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
 	g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
@@ -161,13 +161,13 @@ VOID SetupMatrices()
 
 
 /**-----------------------------------------------------------------------------
-* ê´‘ì› ì„¤ì •
+* ±¤¿ø ¼³Á¤
 *------------------------------------------------------------------------------
 */
 VOID SetupLights()
 {
-	/// ìž¬ì§ˆ(material)ì„¤ì •
-	/// ìž¬ì§ˆì€ ë””ë°”ì´ìŠ¤ì— ë‹¨ í•˜ë‚˜ë§Œ ì„¤ì •ë  ìˆ˜ ìžˆë‹¤.
+	/// ÀçÁú(material)¼³Á¤
+	/// ÀçÁúÀº µð¹ÙÀÌ½º¿¡ ´Ü ÇÏ³ª¸¸ ¼³Á¤µÉ ¼ö ÀÖ´Ù.
 	D3DMATERIAL9 mtrl;
 	ZeroMemory(&mtrl, sizeof(D3DMATERIAL9));
 	mtrl.Ambient.r = 1.0f;
@@ -181,60 +181,60 @@ VOID SetupLights()
 	mtrl.Diffuse.a = 1.0f;
 	g_pd3dDevice->SetMaterial(&mtrl);
 
-	/// ê´‘ì› ì„¤ì •
-	D3DXVECTOR3 vecDir;									/// ë°©í–¥ì„± ê´‘ì›(directional light)ì´ í–¥í•  ë¹›ì˜ ë°©í–¥
-	D3DLIGHT9 light;									/// ê´‘ì› êµ¬ì¡°ì²´
-	ZeroMemory(&light, sizeof(D3DLIGHT9));			/// êµ¬ì¡°ì²´ë¥¼ 0ìœ¼ë¡œ ì§€ìš´ë‹¤.
-	light.Type = D3DLIGHT_DIRECTIONAL;			/// ê´‘ì›ì˜ ì¢…ë¥˜(ì  ê´‘ì›,ë°©í–¥ì„± ê´‘ì›,ìŠ¤í¬íŠ¸ë¼ì´íŠ¸)
-	light.Diffuse.r = 1.0f;							/// ê´‘ì›ì˜ ìƒ‰ê¹”ê³¼ ë°ê¸°
+	/// ±¤¿ø ¼³Á¤
+	D3DXVECTOR3 vecDir;									/// ¹æÇâ¼º ±¤¿ø(directional light)ÀÌ ÇâÇÒ ºûÀÇ ¹æÇâ
+	D3DLIGHT9 light;									/// ±¤¿ø ±¸Á¶Ã¼
+	ZeroMemory(&light, sizeof(D3DLIGHT9));			/// ±¸Á¶Ã¼¸¦ 0À¸·Î Áö¿î´Ù.
+	light.Type = D3DLIGHT_DIRECTIONAL;			/// ±¤¿øÀÇ Á¾·ù(Á¡ ±¤¿ø,¹æÇâ¼º ±¤¿ø,½ºÆ÷Æ®¶óÀÌÆ®)
+	light.Diffuse.r = 1.0f;							/// ±¤¿øÀÇ »ö±ò°ú ¹à±â
 	light.Diffuse.g = 1.0f;
 	light.Diffuse.b = 1.0f;
-	/*vecDir = vecDir(cosf(timeGetTime() / 350.0f),	/// ê´‘ì›ì˜ ë°©í–¥
+	/*vecDir = vecDir(cosf(timeGetTime() / 350.0f),	/// ±¤¿øÀÇ ¹æÇâ
 		1.0f,
 		sinf(timeGetTime() / 350.0f));*/
 	vecDir = D3DXVECTOR3(0, 0, 1);
-	D3DXVec3Normalize((D3DXVECTOR3*)&light.Direction, &vecDir);	/// ê´‘ì›ì˜ ë°©í–¥ì„ ë‹¨ìœ„ë²¡í„°ë¡œ ë§Œë“ ë‹¤.
+	D3DXVec3Normalize((D3DXVECTOR3*)&light.Direction, &vecDir);	/// ±¤¿øÀÇ ¹æÇâÀ» ´ÜÀ§º¤ÅÍ·Î ¸¸µç´Ù.
 
-	light.Range = 1000.0f;									/// ê´‘ì›ì´ ë‹¤ë‹¤ë¥¼ìˆ˜ ìžˆëŠ” ìµœëŒ€ê±°ë¦¬
-	g_pd3dDevice->SetLight(0, &light);							/// ë””ë°”ì´ìŠ¤ì— 0ë²ˆ ê´‘ì› ì„¤ì¹˜
-	g_pd3dDevice->LightEnable(0, TRUE);							/// 0ë²ˆ ê´‘ì›ì„ ì¼ ë‹¤
-	g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);			/// ê´‘ì›ì„¤ì •ì„ ì¼ ë‹¤
+	light.Range = 1000.0f;									/// ±¤¿øÀÌ ´Ù´Ù¸¦¼ö ÀÖ´Â ÃÖ´ë°Å¸®
+	g_pd3dDevice->SetLight(0, &light);							/// µð¹ÙÀÌ½º¿¡ 0¹ø ±¤¿ø ¼³Ä¡
+	g_pd3dDevice->LightEnable(0, TRUE);							/// 0¹ø ±¤¿øÀ» ÄÒ´Ù
+	g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);			/// ±¤¿ø¼³Á¤À» ÄÒ´Ù
 
-	g_pd3dDevice->SetRenderState(D3DRS_AMBIENT, 0x00202020);		/// í™˜ê²½ê´‘ì›(ambient light)ì˜ ê°’ ì„¤ì •
+	g_pd3dDevice->SetRenderState(D3DRS_AMBIENT, 0x00202020);		/// È¯°æ±¤¿ø(ambient light)ÀÇ °ª ¼³Á¤
 }
 
 
 
 
 /**-----------------------------------------------------------------------------
-* í™”ë©´ ê·¸ë¦¬ê¸°
+* È­¸é ±×¸®±â
 *------------------------------------------------------------------------------
 */
 VOID Render()
 {
-	/// í›„ë©´ë²„í¼ì™€ Zë²„í¼ë¥¼ ì§€ìš´ë‹¤.
+	/// ÈÄ¸é¹öÆÛ¿Í Z¹öÆÛ¸¦ Áö¿î´Ù.
 	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
 		D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 
-	/// ë Œë”ë§ ì‹œìž‘
+	/// ·»´õ¸µ ½ÃÀÛ
 	if (SUCCEEDED(g_pd3dDevice->BeginScene()))
 	{
-		/// ê´‘ì›ê³¼ ìž¬ì§ˆ ì„¤ì •
+		/// ±¤¿ø°ú ÀçÁú ¼³Á¤
 		SetupLights();
 
-		/// ì›”ë“œ,ë·°,í”„ë¡œì ì…˜ í–‰ë ¬ì„ ì„¤ì •í•œë‹¤.
+		/// ¿ùµå,ºä,ÇÁ·ÎÁ§¼Ç Çà·ÄÀ» ¼³Á¤ÇÑ´Ù.
 		SetupMatrices();
 
-		/// ì •ì ë²„í¼ì˜ ë‚´ìš©ì„ ê·¸ë¦°ë‹¤.
+		/// Á¤Á¡¹öÆÛÀÇ ³»¿ëÀ» ±×¸°´Ù.
 		g_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
 		g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
 		g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2 * 50 - 2);
 
-		/// ë Œë”ë§ ì¢…ë£Œ
+		/// ·»´õ¸µ Á¾·á
 		g_pd3dDevice->EndScene();
 	}
 
-	/// í›„ë©´ë²„í¼ë¥¼ ë³´ì´ëŠ” í™”ë©´ìœ¼ë¡œ!
+	/// ÈÄ¸é¹öÆÛ¸¦ º¸ÀÌ´Â È­¸éÀ¸·Î!
 	g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
@@ -242,7 +242,7 @@ VOID Render()
 
 
 /**-----------------------------------------------------------------------------
-* ìœˆë„ìš° í”„ë¡œì‹œì ¸
+* À©µµ¿ì ÇÁ·Î½ÃÁ®
 *------------------------------------------------------------------------------
 */
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -262,33 +262,33 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 /**-----------------------------------------------------------------------------
-* í”„ë¡œê·¸ëž¨ ì‹œìž‘ì 
+* ÇÁ·Î±×·¥ ½ÃÀÛÁ¡
 *------------------------------------------------------------------------------
 */
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 {
-	/// ìœˆë„ìš° í´ëž˜ìŠ¤ ë“±ë¡
+	/// À©µµ¿ì Å¬·¡½º µî·Ï
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L,
 		GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
 		"D3D Tutorial", NULL };
 	RegisterClassEx(&wc);
 
-	/// ìœˆë„ìš° ìƒì„±
+	/// À©µµ¿ì »ý¼º
 	HWND hWnd = CreateWindow("D3D Tutorial", "D3D Tutorial 04: Lights",
 		WS_OVERLAPPEDWINDOW, 100, 100, 300, 300,
 		GetDesktopWindow(), NULL, wc.hInstance, NULL);
 
-	/// Direct3D ì´ˆê¸°í™”
+	/// Direct3D ÃÊ±âÈ­
 	if (SUCCEEDED(InitD3D(hWnd)))
 	{
-		/// ê¸°í•˜ì •ë³´ ì´ˆê¸°í™”
+		/// ±âÇÏÁ¤º¸ ÃÊ±âÈ­
 		if (SUCCEEDED(InitGeometry()))
 		{
-			/// ìœˆë„ìš° ì¶œë ¥
+			/// À©µµ¿ì Ãâ·Â
 			ShowWindow(hWnd, SW_SHOWDEFAULT);
 			UpdateWindow(hWnd);
 
-			/// ë©”ì‹œì§€ ë£¨í”„
+			/// ¸Þ½ÃÁö ·çÇÁ
 			MSG msg;
 			ZeroMemory(&msg, sizeof(msg));
 			while (msg.message != WM_QUIT)
@@ -307,5 +307,3 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 	UnregisterClass("D3D Tutorial", wc.hInstance);
 	return 0;
 }
-
-

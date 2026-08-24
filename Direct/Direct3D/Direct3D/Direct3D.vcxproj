@@ -24,7 +24,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5b0b786c-d03c-4681-99e6-36ef49d38e75}</ProjectGuid>
+    <ProjectGuid>{74418018-58d6-4899-8e79-00f353099788}</ProjectGuid>
     <RootNamespace>Direct3D</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
