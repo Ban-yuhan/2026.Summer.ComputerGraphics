@@ -105,10 +105,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return FALSE;
     }
     
-    // main.cpp 내부 Initialize 부분
-
-    // main.cpp 안의 Initialize 호출 부분
-
     if (!g_Player.Initialize(g_Graphics.GetRenderTarget(), L"Resources/Player.png", L"Resources/Bullet.png"))
     {
         MessageBox(hWnd, L"이미지를 로드하는 데 실패했습니다! (Player.png 또는 Bullet.png 확인)", L"에러", MB_OK);
