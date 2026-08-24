@@ -158,7 +158,7 @@ VOID SetupMatrices()
     // period before conversion to a radian angle.
     UINT iTime = timeGetTime() % 1000;
     FLOAT fAngle = iTime * ( 2.0f * D3DX_PI ) / 1000.0f;
-    D3DXMatrixRotationZ( &matWorld, fAngle );
+    D3DXMatrixRotationY( &matWorld, fAngle );
     g_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
     // Set up our view matrix. A view matrix can be defined given an eye point,

@@ -42,7 +42,7 @@ namespace DX2DClasses
 		CGameObject* m_pItemEffectObject;
 		CGameObject* m_pDeathEffectObject;
 
-		float m_fPlayerSpeed = 2;
+		float m_fPlayerSpeed = 10;
 		float m_fPlayerJumpHigher = 7;
 		float m_fOpossumSpeed = 3;
 		float m_fEangleSpeed = 5;

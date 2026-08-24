@@ -17,47 +17,34 @@ using namespace DX2DClasses;
 
 CMoveSampleScene::CMoveSampleScene()
 {
-	//Initialize();
 }
 
 CMoveSampleScene::~CMoveSampleScene()
 {
-	//Release();
 }
 
 void CMoveSampleScene::Reset()
 {
-	float fPlayerSpeed = 2;
-	float fPlayerJumpHigher = 7;
-	float fOpossumSpeed = 3;
-	float fEangleSpeed = 5;
+	// 플레이어를 하단 중앙에 배치
+	m_pPlayerObject->GetTransform().SetTransrate(SVector2(400, 500));
 
-	float fAngle = 0;
+	// 적들을 화면 상단 바깥으로 배치 (위에서 아래로 떨어지게 설정)
+	m_pOpossumObject->GetTransform().SetTransrate(SVector2(250, -50));
+	m_pEagleObject->GetTransform().SetTransrate(SVector2(550, -100));
+
+	// 사용하지 않거나 대기 중인 이펙트와 더미 객체를 화면 밖으로 숨김
+	m_pCherryObject->GetTransform().SetTransrate(SVector2(-100, -100));
+	m_pGemObject->GetTransform().SetTransrate(SVector2(-100, -100));
+	m_pItemEffectObject->GetTransform().SetTransrate(SVector2(-100, -100));
+	m_pDeathEffectObject->GetTransform().SetTransrate(SVector2(-100, -100));
+
+	// 점수 초기화
+	m_nScore = 0;
+
+	// 총알(m_listItems)들 모두 화면 밖 대기 상태로 초기화
+	for (int i = 0; i < m_listItems.size(); i++)
 	{
-		CTransform& cTrnasform = m_pPlayerObject->GetTransform();
-		SVector2 vPos = cTrnasform.GetTransrate();
-		SVector2 vSize = m_pPlayerObject->GetImage()->GetImageSize();
-		SVector2 vScale(1, 1);
-		cTrnasform.SetTransrate(vPos);
-	}
-
-	//
-	{
-		CTransform& cTrnasform = m_pOpossumObject->GetTransform();
-		SVector2 vPos = SVector2(250,0);
-		cTrnasform.SetTransrate(vPos);
-	}
-
-
-	{
-		CTransform& cTrnasform = m_pEagleObject->GetTransform();
-		SVector2 vSize = m_pEagleObject->GetImage()->GetImageSize();
-		SVector2 vPos = SVector2(300, 300);
-		//SVector2 vScale(1, 1);
-		cTrnasform.SetTransrate(vPos);
-		//SVector2 vAsix = vSize * 0.5f;
-		//cTrnasform.SetAsixPoint(vAsix);
-		//cTrnasform.SetTRS(vPos, 0, vScale);
+		m_listItems[i]->GetTransform().SetTransrate(SVector2(-100, -100));
 	}
 }
 
@@ -103,27 +90,22 @@ void CMoveSampleScene::Initialize(HWND hWnd, CDriect2DFramwork* pDX2DFramework)
 	m_pDeathEffectObject = new CGameObject();
 	m_pDeathEffectObject->Initialize(m_pDeathEffectImage, true);
 
+	// m_listItems를 총알 오브젝트 풀(Pool)로 활용 (10발 제한)
 	int nSize = 10;
-	m_listItems.resize(10);
+	m_listItems.resize(nSize);
 
 	for (int i = 0; i < nSize; i++)
 	{
 		CGameObject* pItem = new CGameObject();
-		if( i % 2)
-			pItem->Initialize(m_pGemImage, true);
+		if (i % 2)
+			pItem->Initialize(m_pGemImage, true); // 보석 모양 총알
 		else
-			pItem->Initialize(m_pCherryImage, true);
-
-		//CTransform& cTrnasform = pItem->GetTransform();
-		//SVector2 vPos = SVector2(i * 50, 300);
-		//cTrnasform.SetTransrate(vPos);
-
-		pItem->GetTransform().SetTransrate(i * 50, 300);
-		//pItem->GetTransformPtr()->SetTransrate(SVector2(i * 50, 300));
+			pItem->Initialize(m_pCherryImage, true); // 체리 모양 총알
 
 		m_listItems[i] = pItem;
 	}
 
+	// 모든 객체 초기 위치 셋팅
 	Reset();
 }
 
@@ -136,20 +118,13 @@ void CMoveSampleScene::Release()
 	}
 	m_listItems.clear();
 
-	m_pPlayerObject->Release();
-	delete m_pPlayerObject;
-	m_pOpossumObject->Release();
-	delete m_pOpossumObject;
-	m_pEagleObject->Release();
-	delete m_pEagleObject;
-	m_pCherryObject->Release();
-	delete m_pCherryObject;
-	m_pGemObject->Release();
-	delete m_pGemObject;
-	m_pItemEffectObject->Release();
-	delete m_pItemEffectObject;
-	m_pDeathEffectObject->Release();
-	delete m_pDeathEffectObject;
+	m_pPlayerObject->Release(); delete m_pPlayerObject;
+	m_pOpossumObject->Release(); delete m_pOpossumObject;
+	m_pEagleObject->Release(); delete m_pEagleObject;
+	m_pCherryObject->Release(); delete m_pCherryObject;
+	m_pGemObject->Release(); delete m_pGemObject;
+	m_pItemEffectObject->Release(); delete m_pItemEffectObject;
+	m_pDeathEffectObject->Release(); delete m_pDeathEffectObject;
 
 	delete m_pPlayerImage;
 	delete m_pOpossumImage;
@@ -167,141 +142,136 @@ void CMoveSampleScene::Release()
 
 void CMoveSampleScene::Update()
 {
-	CDebugHelper::OpenConsole();
-	//블록을 활용하여 각 오브젝트 처리시 지역변수를 동일한 이름으로 활용가능하도록 함.
+	// CDebugHelper::OpenConsole(); // 필요시 콘솔 활성화
 
+	// 1. 플레이어 이동 처리
+	CTransform& playerTrans = m_pPlayerObject->GetTransform();
+	if (CInputManager::GetAsyncKeyStatePress(VK_RIGHT))
+		playerTrans.Transrate(SVector2::right() * m_fPlayerSpeed);
+	if (CInputManager::GetAsyncKeyStatePress(VK_LEFT))
+		playerTrans.Transrate(SVector2::left() * m_fPlayerSpeed);
+	if (CInputManager::GetAsyncKeyStatePress(VK_DOWN))
+		playerTrans.Transrate(SVector2::down() * m_fPlayerSpeed);
+	if (CInputManager::GetAsyncKeyStatePress(VK_UP))
+		playerTrans.Transrate(SVector2::up() * m_fPlayerSpeed);
 
-	if (CInputManager::GetAsyncKeyStatePress(VK_F1))
-	{
-		CDebugHelper::LogConsole("GetAsyncKeyStatePress(VK_F1)");
-	}
-
-	if (CInputManager::GetAsyncKeyStateRelease(VK_F1))
-	{
-		CDebugHelper::LogConsole("GetAsyncKeyStateRelease(VK_F1)");
-	}
-
-	static float fAngle = 0;
-	{
-		CTransform& cTrnasform = m_pPlayerObject->GetTransform();
-		SVector2 vPos = cTrnasform.GetTransrate();
-		SVector2 vSize = m_pOpossumObject->GetImage()->GetImageSize();
-		SVector2 vAsix = vSize * 0.5f;
-		SVector2 vScale = cTrnasform.GetScale();
-
-		//벡터방식 연산보다는 효률적이다.
-		if (CInputManager::GetAsyncKeyStatePress(VK_RIGHT))
-			cTrnasform.Transrate(SVector2::right() * m_fPlayerSpeed);//vPlayerPos.x -= fPlayerSpeed;
-		if (CInputManager::GetAsyncKeyStatePress(VK_LEFT))
-			cTrnasform.Transrate(SVector2::left() * m_fPlayerSpeed);//vPlayerPos.x -= fPlayerSpeed;
-		if (CInputManager::GetAsyncKeyStatePress(VK_DOWN))
-			cTrnasform.Transrate(SVector2::down() * m_fPlayerSpeed);//vPlayerPos.x -= fPlayerSpeed;
-		if (CInputManager::GetAsyncKeyStatePress(VK_UP))
-			cTrnasform.Transrate(SVector2::up() * m_fPlayerSpeed);//vPlayerPos.x -= fPlayerSpeed;
-		if (CInputManager::GetAsyncKeyStatePress(90))
-			cTrnasform.Transrate(SVector2::left() * m_fPlayerSpeed);//vPlayerPos.x -= fPlayerSpeed;
-
-		cTrnasform.SetAsixPoint(vAsix);
-		//cTrnasform.Rotate(10);
-	}
 	m_pPlayerObject->Update();
 
+	// 2. 총알 발사 처리 (스페이스바)
+	static int fireDelay = 0; // 지역 정적 변수로 연사 딜레이 관리
+	if (fireDelay > 0) fireDelay--;
+
+	if (CInputManager::GetAsyncKeyStatePress(VK_SPACE) && fireDelay <= 0)
 	{
-		CTransform& cTrnasform = m_pOpossumObject->GetTransform();
-		SVector2 vSize = m_pOpossumObject->GetImage()->GetImageSize();
-		SVector2 vScale = cTrnasform.GetScale();
-		SVector2 vAsix = vSize * 0.5f;
-		SVector2 vPos = cTrnasform.GetTransrate();
-
-		vPos = vPos + SVector2::left() * m_fOpossumSpeed;
-
-		if (vPos.x <= 0) vPos.x = 250;
-
-		cTrnasform.SetAsixPoint(vAsix);
-		cTrnasform.SetTRS(vPos, 0, vScale);
+		for (int i = 0; i < m_listItems.size(); i++)
+		{
+			SVector2 vPos = m_listItems[i]->GetTransform().GetTransrate();
+			// 화면 밖에 있는(대기 중인) 총알을 찾아서 발사
+			if (vPos.y <= 0 || vPos.x <= 0)
+			{
+				m_listItems[i]->GetTransform().SetTransrate(playerTrans.GetTransrate());
+				fireDelay = 15; // 15프레임 연사 딜레이
+				break;
+			}
+		}
 	}
+
+	// 3. 총알 이동 처리 (위로 발사) - m_fPlayerJumpHigher 변수를 총알 속도로 활용
+	for (int i = 0; i < m_listItems.size(); i++)
+	{
+		CTransform& bulletTrans = m_listItems[i]->GetTransform();
+		SVector2 vPos = bulletTrans.GetTransrate();
+
+		if (vPos.x > 0 && vPos.y > 0) // 현재 화면에 발사되어 있는 총알만 이동
+		{
+			bulletTrans.Transrate(SVector2::up() * m_fPlayerJumpHigher);
+			// 화면 위로 벗어나면 대기 상태(화면 밖)로 전환하여 풀 반환
+			if (vPos.y < -50)
+				bulletTrans.SetTransrate(SVector2(-100, -100));
+		}
+		m_listItems[i]->Update();
+	}
+
+	// 4. 적 이동 처리 (위에서 아래로)
+	// 주머니쥐
+	CTransform& opossumTrans = m_pOpossumObject->GetTransform();
+	opossumTrans.Transrate(SVector2::down() * m_fOpossumSpeed);
+	if (opossumTrans.GetTransrate().y > 600) // 화면 아래로 나가면 재스폰
+		opossumTrans.SetTransrate(SVector2((rand() % 600) + 100, -50));
 	m_pOpossumObject->Update();
-	
-	{
-		CTransform& cTrnasform = m_pEagleObject->GetTransform();
-		SVector2 vPos = m_pEagleObject->GetTransform().GetTransrate();
-		SVector2 vTargetPos = m_pPlayerObject->GetTransform().GetTransrate();
-		SVector2 vDir = vTargetPos - vPos;
-		vDir = vDir.Normalize();
-		vPos = vPos + vDir * m_fEangleSpeed;
-		cTrnasform.SetTransrate(vPos);	
-	}
+
+	// 독수리
+	CTransform& eagleTrans = m_pEagleObject->GetTransform();
+	eagleTrans.Transrate(SVector2::down() * m_fEangleSpeed);
+	if (eagleTrans.GetTransrate().y > 600) // 화면 아래로 나가면 재스폰
+		eagleTrans.SetTransrate(SVector2((rand() % 600) + 100, -50));
 	m_pEagleObject->Update();
-	
-	m_pCherryObject->Update();
-	m_pCherryObject->GetTransform().SetTransrate(0, 50);
-
-	m_pGemObject->Update();
-	m_pGemObject->GetTransform().SetTransrate(0, 80);
-
-	//m_pItemEffectObject->Update();
-	//m_pItemEffectObject->GetTransform().SetTransrate(0, 100);
-
-	m_pDeathEffectObject->Update();
-	m_pDeathEffectObject->GetTransform().SetTransrate(0, 120);
 
 
-	SVector2 vPlayerPos = m_pPlayerObject->GetTransform().GetTransrate();
-	SVector2 vPlayerSize = m_pPlayerObject->GetImage()->GetImageSize() * 0.5f;
-	float fPlayerRad = vPlayerSize.Magnitude();
+	// 5. 충돌 처리 로직 (총알 vs 적 기체)
+	SVector2 vOpossumPos = opossumTrans.GetTransrate();
+	float fOpossumRad = m_pOpossumObject->GetImage()->GetImageSize().Magnitude() * 0.5f;
+
+	SVector2 vEaglePos = eagleTrans.GetTransrate();
+	float fEagleRad = m_pEagleObject->GetImage()->GetImageSize().Magnitude() * 0.5f;
 
 	for (int i = 0; i < m_listItems.size(); i++)
 	{
-		CGameObject* pObjItem = m_listItems[i];
-		SVector2 vItemPos = pObjItem->GetTransform().GetTransrate();
-		SVector2 vItemSize = pObjItem->GetImage()->GetImageSize() * 0.5f;
-		float fItemRad = vItemSize.Magnitude();
+		SVector2 vBulletPos = m_listItems[i]->GetTransform().GetTransrate();
+		// 대기 중인 총알은 충돌 연산에서 제외
+		if (vBulletPos.y <= 0) continue;
 
-		SVector2 vDist = (vItemPos - vPlayerPos);
-		float fDist = vDist.Magnitude();
-		CDebugHelper::LogConsole("PlayerPos[%f](%f,%f) ItemPos[%f](%f,%f) Dist:%f\n", fPlayerRad, vPlayerPos.x, vPlayerPos.y, fItemRad, vItemPos.x, vItemPos.y, fDist);
-		
-		if (CCollisionCheck::OverlapCircleToCircle(vPlayerPos, fPlayerRad, vItemPos, fItemRad))
+		float fBulletRad = m_listItems[i]->GetImage()->GetImageSize().Magnitude() * 0.5f;
+
+		// 5-1. 주머니쥐 피격 판정
+		if (CCollisionCheck::OverlapCircleToCircle(vBulletPos, fBulletRad, vOpossumPos, fOpossumRad))
 		{
-			m_pItemEffectObject->GetTransform().SetTransrate(vItemPos);
-			m_pItemEffectObject->Update();
+			// 피격 이펙트 표시 및 적 재스폰
+			m_pDeathEffectObject->GetTransform().SetTransrate(vOpossumPos);
+			opossumTrans.SetTransrate(SVector2((rand() % 600) + 100, -50));
+			// 총알 회수
+			m_listItems[i]->GetTransform().SetTransrate(SVector2(-100, -100));
+			m_nScore += 10;
 		}
-
-		pObjItem->Update();
+		// 5-2. 독수리 피격 판정
+		else if (CCollisionCheck::OverlapCircleToCircle(vBulletPos, fBulletRad, vEaglePos, fEagleRad))
+		{
+			// 피격 이펙트 표시 및 적 재스폰
+			m_pItemEffectObject->GetTransform().SetTransrate(vEaglePos);
+			eagleTrans.SetTransrate(SVector2((rand() % 600) + 100, -50));
+			// 총알 회수
+			m_listItems[i]->GetTransform().SetTransrate(SVector2(-100, -100));
+			m_nScore += 20;
+		}
 	}
+
+	m_pItemEffectObject->Update();
+	m_pDeathEffectObject->Update();
 }
 
 void CMoveSampleScene::Draw()
 {
-	ID2D1HwndRenderTarget* pRenderTarget = CSingletonRenderTarget::GetRenderTarget();
-	CColorBrush* pRedBrush = m_pColorBrushPalettet->GetBrushClass(CColorBrushPalettet::RED);
-	CColorBrush* pGreenBrush = m_pColorBrushPalettet->GetBrushClass(CColorBrushPalettet::GREEN);
-	CColorBrush* pYellowBrush = m_pColorBrushPalettet->GetBrushClass(CColorBrushPalettet::YELLOW);
-	CColorBrush* pBlackBrush = m_pColorBrushPalettet->GetBrushClass(CColorBrushPalettet::BLACK);
+	// ID2D1HwndRenderTarget* pRenderTarget = CSingletonRenderTarget::GetRenderTarget();
 
-
+	// 플레이어 및 적 기체 렌더링
 	m_pPlayerObject->Draw();
-	//CDebugHelper::DrawBox(m_pPlayerObject, CColorBrushPalettet::GetInstance()->GetBrushClass(CColorBrushPalettet::BLACK));
-	//CDebugHelper::DrawCircle(m_pPlayerObject,pBlackBrush);
-
 	m_pOpossumObject->Draw();
-	CDebugHelper::DrawRect(m_pOpossumObject, pRedBrush);
-
 	m_pEagleObject->Draw();
-	CDebugHelper::DrawCircle(m_pEagleObject,pYellowBrush);
 
-	m_pCherryObject->Draw();
-	m_pGemObject->Draw();
+	// 발사되어 화면에 존재하는 총알만 렌더링
+	for (int i = 0; i < m_listItems.size(); i++)
+	{
+		if (m_listItems[i]->GetTransform().GetTransrate().y > 0)
+		{
+			m_listItems[i]->Draw();
+		}
+	}
 
+	// 파괴 이펙트 렌더링
 	m_pItemEffectObject->Draw();
 	m_pDeathEffectObject->Draw();
 
-	SVector2 vPlayerPos = m_pPlayerObject->GetTransform().GetTransrate();
-	SVector2 vPlayerSize = m_pPlayerObject->GetImage()->GetImageSize() * 0.5f;
-	float fPlayerRad = vPlayerSize.Magnitude();
-
-	for (int i = 0; i < m_listItems.size() ; i++)
-	{
-		m_listItems[i]->Draw();
-	}
+	// 필요 시 사용하지 않는 더미 객체도 에러 방지 차원에서 Draw 가능 (화면 밖에 있으므로 안보임)
+	m_pCherryObject->Draw();
+	m_pGemObject->Draw();
 }
